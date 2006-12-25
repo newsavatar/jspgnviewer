@@ -1,0 +1,13 @@
+#summary Information page about where to get stuff
+
+= Information about jsPgnViewer =
+
+Project's homepage [http://www.pgnview.com]
+ * Project's blog [http://tom.jabber.ee/chessblog]
+ * Project's downloads [http://tom.jabber.ee/chess/index.php?n=Main.Download]
+  * I'll migrate downloads to Google Code when I have time.
+ * Affiliate project [http://www.chesspastebin.com]
+
+== What do different release names mean? ==
+ * jspgnviewer-x.x.x.tar.gz - the javascript library
+ * pgnviewer-x.x.x.tar.gz - the WordPress plugin
