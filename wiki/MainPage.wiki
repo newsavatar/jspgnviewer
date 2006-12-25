@@ -1,5 +1,3 @@
-#summary Information page about where to get stuff
-
 = Information about jsPgnViewer =
 
 Project's homepage [http://www.pgnview.com]
