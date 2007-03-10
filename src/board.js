@@ -15,7 +15,11 @@
 **/
 
 	function Board(divId, options) {
-		var pgn = new Pgn(document.getElementById(divId).firstChild.nodeValue);
+		var tmpEl = document.getElementById(divId)
+		var pgn = new Array()
+		for (var i=0;i<tmpEl.childNodes.length;i++)
+			pgn[pgn.length] = tmpEl.childNodes[i].nodeValue
+		pgn = new Pgn(pgn.join(""));
 		this.conv = new Converter(pgn)
 		this.conv.convert()
 		this.movesOnPane = new Array()
