@@ -26,7 +26,7 @@ function Pgn(pgn) {
 		pgn = pgn.replace(/\n/g, " ")
 		while(pgn.indexOf("  ")!=-1)
 			pgn = pgn.replace("  ", " ")
-		console.log(pgn)
+		//console.log(pgn)
 		//pgn = pgn.replace(/\.\.\./g, ".")
 		var comment = false
 		var commentStarted = true
@@ -43,7 +43,7 @@ function Pgn(pgn) {
 		
 		var cMove = new DirtyMove()
 		cMove.no = 1
-		
+		pgn = pgn.replace(/\.\.\./g, ".");	
 		for (var i=0;i<pgn.length;i++) {
 			switch (pgn.charAt(i)) {
 				case '{':
@@ -55,12 +55,16 @@ function Pgn(pgn) {
 					commentEnded = true
 					break
 				case '(':
-					variation=true
-					variationStarted=true
+					if (!comment) {
+						variation=true
+						variationStarted=true
+					}
 					break
 				case ')':
-					variation=false
-					variationEnded=true
+					if (!comment) {
+						variation=false
+						variationEnded=true
+					}
 					break
 				case '[':
 					props = true
@@ -75,48 +79,63 @@ function Pgn(pgn) {
 
 			if (commentStarted) {
 				cMove.startNewComment()
+				//console.log("Starting a new comment");
 				commentStarted = false
 				continue
 			}
 			if (commentEnded) {
 				commentEnded = false
 				comment = false
+				//console.log("Ending a comment");
 				continue
 			}
 			if (comment) {
 				cMove.addToComment(pgn.charAt(i))
+				//console.log("Adding to comment ", pgn.charAt(i))
 				continue
 			}
 
 			if (variationStarted) {
 				cMove.startNewVariation()
+				//console.log("Starting a variation")
 				variationStarted = false	
 				continue
 			}
 			if (variationEnded) {
+				//console.log("Ending a variation")
 				variation = false
 				variationEnded = false
 				continue
 			}
 			if (variation) {
+				//console.log("Adding to variation "+pgn.charAt(i))
 				cMove.addToVariation(pgn.charAt(i))
 				continue;
 			}
 			
+			//console.log("Looking for "+(moveIndex+1))
 			if (!((pgn.substr(i,(""+(moveIndex+1)).length+1) == (moveIndex+1)+"."))) {
 				cMove.addToMove(pgn.charAt(i))
+				//console.log("NOT Found, we have char '"+pgn.charAt(i)+"'");
 			}
 			else {
+				//console.log("Found, we have char '"+pgn.charAt(i)+"'");
+				cMove.normalize()
 				moveIndex++
 				moves[moves.length] = cMove
 				cMove = new DirtyMove()
+				cMove.addToMove(pgn.charAt(i))
 				cMove.no = moveIndex
 			}
 		}
+		console.log("PGN LENGTH: "+pgn.length+"chars")
+
 		moves[moves.length] = cMove
 		console.log(moves.length)
+		console.log(moves[0].moveStr.join("").charAt(1)== " ")
 		for (i in moves) {
-			console.log("'"+moves[i].move.join("")+"'")
+			console.log("'"+moves[i].moveStr.join("")+"'",
+							moves[i])
 		}
 	}
 	this.extractMoves = function(gameOverre){
@@ -251,7 +270,8 @@ function Pgn(pgn) {
 }
 
 function DirtyMove() {
-	this.move = new Array()
+	this.move = ""
+	this.moveStr = new Array()
 	this.no = 0
 	
 	this.variations = new Array()
@@ -259,6 +279,12 @@ function DirtyMove() {
 	
 	this.comments = new Array()
 	this.commentIndex = -1
+
+	this.normalize = function() {
+		this.move = this.moveStr.join("")
+		this.move = this.move.replace(this.no+"\.","")
+		this.move = this.move.replace(this.no+"\.","")
+	}
 
 	this.startNewComment = function() {
 		this.commentIndex++
@@ -279,11 +305,11 @@ function DirtyMove() {
 	}
 
 	this.addToMove = function(ch) {
-		this.move[this.move.length] = ch
+		this.moveStr[this.moveStr.length] = ch
 	}
 
 	this.toString = function() {
-		return "no="+this.no+"move="+this.move.join("")+"; "+this.variations.length+"; "+this.comments.length+"\n"
+		return "no="+this.no+";move="+this.move+";moveStr="+this.moveStr.join("")+"; "+this.variations.length+"; "+this.comments.length+"\n"
 	}
 }
 
