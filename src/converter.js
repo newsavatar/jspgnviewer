@@ -25,7 +25,7 @@
 	to e4. We also have to remember from where did we place
 	the pawn. To make it easier and to have less calculations
 	the PGN is converted into a format where the from square
-	with contents is explicit and to square also. There are
+	with contents is explicit and the to square also. There are
 	other problems also regarding backward moving and remembering
 	which piece was taken.
 */
