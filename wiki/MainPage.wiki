@@ -2,8 +2,7 @@
 
 Project's homepage [http://www.pgnview.com]
  * Project's blog [http://tom.jabber.ee/chessblog]
- * Project's downloads [http://tom.jabber.ee/chess/index.php?n=Main.Download]
-  * I'll migrate downloads to Google Code when I have time.
+ * Project's downloads [http://code.google.com/p/jspgnviewer/downloads/list]
  * Affiliate project [http://www.chesspastebin.com]
 
 == What do different release names mean? ==
